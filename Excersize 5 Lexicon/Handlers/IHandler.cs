@@ -1,6 +1,6 @@
 ﻿namespace Excersize_5_Lexicon.Handlers;
 
-interface IHandler
+public interface IHandler
 {
     //Propertys
 

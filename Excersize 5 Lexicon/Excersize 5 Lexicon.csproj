@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Extras\" />
+    <PackageReference Include="ReportGenerator" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

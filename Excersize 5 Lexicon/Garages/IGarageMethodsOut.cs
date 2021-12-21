@@ -2,6 +2,7 @@
 
 internal interface IGarageMethodsOut<out T>
 {
+    //Public methods
     public T GetVehicleFromRegistration(string registrationNumber);
 }
 

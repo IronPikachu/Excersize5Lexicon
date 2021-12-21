@@ -1,6 +1,9 @@
-﻿namespace Excersize_5_Lexicon.Handlers;
+﻿using Excersize_5_Lexicon.Garages;
+using Excersize_5_Lexicon.Vehicles;
 
-class Handler : IHandler
+namespace Excersize_5_Lexicon.Handlers;
+
+public class Handler : IHandler, IGarageMethodsIn<Vehicle>
 {
     //Fields
 
@@ -12,12 +15,19 @@ class Handler : IHandler
 
 
     //Public Methods
+    public void AddVehicle(Vehicle vehicle)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveVehicle(Vehicle vehicle)
+    {
+        throw new NotImplementedException();
+    }
 
 
     //Private Methods
 
 
     //Destructors
-
-
 }
