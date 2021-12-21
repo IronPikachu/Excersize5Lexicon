@@ -3,6 +3,7 @@
 interface IGarageMethodsIn<in T> 
 {
     //Public Methods
-    public void AddVehicle(T vehicle);
-    public void RemoveVehicle(T vehicle);
+    public bool AddVehicle(T vehicle);
+    public bool RemoveVehicle(T vehicle);
+    public bool VehicleExists(T vehicle);
 }

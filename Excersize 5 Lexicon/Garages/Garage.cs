@@ -6,11 +6,11 @@ namespace Excersize_5_Lexicon.Garages;
 public class Garage<T> : IGarage<T> where T : Vehicle
 {
     //Fields
+    private string name = "";
     private int maxCapacity;
     private int parkedVehicles;
     private int freeParkingSpots;
-    private string name;
-    private Vehicle[] vehicles;
+    private T?[] vehicles;
 
     //Propertys
     public int MaxCapacity { get { return maxCapacity; } private set { maxCapacity = value; } }
@@ -20,11 +20,18 @@ public class Garage<T> : IGarage<T> where T : Vehicle
         private set
         {
             parkedVehicles = value;
-            FreeParkingSpots = maxCapacity - parkedVehicles;
+            FreeParkingSpots = MaxCapacity - parkedVehicles;
         }
     }
     public int FreeParkingSpots { get { return freeParkingSpots; } private set { freeParkingSpots = value; } }
-    public string Name { get { return name; } private set { name = value; } }
+    public string Name
+    {
+        get { return name; }
+        private set
+        {
+            name = value ?? throw new ArgumentNullException("Name cannot be null");
+        }
+    }
 
     //Constructors
     public Garage(string name, int maxCapacity)
@@ -32,66 +39,76 @@ public class Garage<T> : IGarage<T> where T : Vehicle
         Name = name;
         MaxCapacity = maxCapacity;
         ParkedVehicles = 0;
-        FreeParkingSpots = maxCapacity - parkedVehicles;
-        vehicles = new Vehicle[maxCapacity];
+        vehicles = new T[maxCapacity];
     }
-    public Garage(string name, int maxCapacity, params Vehicle[] vehicles)
+
+    public Garage(string name, int maxCapacity, params T[] vehicles)
     {
         Name = name;
         MaxCapacity = maxCapacity;
         ParkedVehicles = 0;
-        FreeParkingSpots = maxCapacity - parkedVehicles;
-        this.vehicles = new Vehicle[maxCapacity];
+        this.vehicles = new T[maxCapacity];
         for (int i = 0; i < vehicles.Length; i++)
         {
-            this.vehicles[parkedVehicles++] = vehicles[i];
+            this.vehicles[ParkedVehicles++] = vehicles[i];
         }
     }
 
     //Public Methods
-    public void AddVehicle(T vehicle)
+    //AddVehicle returns true on success, false if container is full
+    public bool AddVehicle(T vehicle)
     {
-        if (parkedVehicles >= maxCapacity)
-            throw new ArgumentOutOfRangeException($"The garage is full: {parkedVehicles} vs {maxCapacity}");
+        if (!(parkedVehicles < maxCapacity))
+            return false;
         vehicles[ParkedVehicles++] = vehicle;
+        return true;
+    }
+    //VehicleExists returns true if vehicle exists, false if it doesn't
+    public bool VehicleExists(T vehicle)
+    {
+        for (int i = 0; i < ParkedVehicles; i++)
+        {
+            if(vehicles[i] == vehicle)
+                return true;
+        }
+        return false;
+    }
+    //RemoveVehicle returns true on succesfull removal, false if vehicle does not exist
+    public bool RemoveVehicle(T vehicle)
+    {
+        bool success = false;
+        for (int i = 0; i < ParkedVehicles; i++)
+        {
+            if (vehicles[i] == vehicle)
+            {
+                vehicles[i] = null;
+                success = true;
+                break;
+            }
+        }
+        if(!success)
+            return false;
+        
+        ParkedVehicles--;
+
+        for (int i = 0; i < ParkedVehicles; i++)
+        {
+            if(vehicles[i] == null && vehicles[i + 1] != null)
+            {
+                vehicles[i] = vehicles[i + 1];
+                vehicles[i + 1] = null;
+            }
+        }
+
+        return true;
     }
 
     public IEnumerator<T> GetEnumerator()
     {
         for (int i = 0; i < ParkedVehicles; i++)
         {
-            yield return (T)vehicles[i];
+            yield return vehicles[i]!;
         }
-    }
-
-    public T GetVehicleFromRegistration(string registrationNumber)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Vehicle[] GetListVehicles()
-    {
-        Vehicle[] newVehicles = new Vehicle[maxCapacity];
-        for (int i = 0; i < parkedVehicles; i++)
-        {
-            newVehicles[i] = vehicles[i];
-        }
-        return newVehicles;
-    }
-
-    public Vehicle[] GetListSpecificVehicles()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Vehicle[] GetListAttributeVehicles()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveVehicle(T vehicle)
-    {
-        throw new NotImplementedException();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

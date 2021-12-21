@@ -19,30 +19,22 @@ public class GarageManager : IGarageMethodsIn<Vehicle>
 
 
     //Public Methods
-    public void AddVehicle(Vehicle vehicle)
+    public bool AddVehicle(Vehicle vehicle)
     {
         throw new NotImplementedException();
     }
 
-    public void ListAttributeVehicles()
+    public bool RemoveVehicle(Vehicle vehicle)
     {
         throw new NotImplementedException();
     }
 
-    public void ListSpecificVehicles(Vehicle type)
+    public bool VehicleExists(Vehicle vehicle)
     {
         throw new NotImplementedException();
     }
 
-    public void ListVehicles()
-    {
-        throw new NotImplementedException();
-    }
 
-    public void RemoveVehicle(Vehicle vehicle)
-    {
-        throw new NotImplementedException();
-    }
 
     //Private Methods
 

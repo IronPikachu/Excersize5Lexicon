@@ -25,6 +25,21 @@ public class Handler : IHandler, IGarageMethodsIn<Vehicle>
         throw new NotImplementedException();
     }
 
+    public bool VehicleExists(Vehicle vehicle)
+    {
+        throw new NotImplementedException();
+    }
+
+    bool IGarageMethodsIn<Vehicle>.AddVehicle(Vehicle vehicle)
+    {
+        throw new NotImplementedException();
+    }
+
+    bool IGarageMethodsIn<Vehicle>.RemoveVehicle(Vehicle vehicle)
+    {
+        throw new NotImplementedException();
+    }
+
 
     //Private Methods
 
