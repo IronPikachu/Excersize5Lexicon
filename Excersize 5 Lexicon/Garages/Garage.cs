@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Excersize_5_Lexicon.Garages;
 
-public class Garage<T> : IGarage<T> where T : Vehicle
+public class Garage<T> : IGarage<T> where T : IVehicle
 {
     //Fields
     private string name = "";

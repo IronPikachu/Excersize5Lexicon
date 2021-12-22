@@ -1,14 +1,21 @@
-﻿namespace Excersize_5_Lexicon.UIs;
+﻿using Excersize_5_Lexicon.Vehicles;
 
-public interface IUI
+namespace Excersize_5_Lexicon.UIs
 {
-    //Propertys
-    public string UserName { get; }
+    public interface IUI
+    {
+        string UserName { get; }
 
-    //Public Methods
-
-    //Private Methods
-    protected void PrintErrorMessage(string message);
-
-
+        char AddGarageMenu(char[] validChars);
+        char TypeOfVehicleMenu(char[] validChars, List<string> availableVehicles);
+        string GetGarageNameFromUser(string message);
+        int GetCapacityFromUser(string message, int min = 0);
+        Vehicle GetVehicleFromUser<T>() where T : Vehicle;
+        char AddVehicleMenu(char[] validChars, List<string> availableVehicles);
+        void Farewell();
+        void Greetings();
+        char MainMenu(int nrOfGarages, char[] validChars);
+        void PrintErrorMessage(string message);
+        void PrintMessage(string message);
+    }
 }

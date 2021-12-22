@@ -2,7 +2,7 @@
 
 namespace Excersize_5_Lexicon.Garages;
 
-internal interface IGarage<T> : IGarageMethodsIn<T>, IEnumerable<T> where T : Vehicle
+public interface IGarage<T> : IGarageMethodsIn<T>, IEnumerable<T> where T : IVehicle
 {
     //Propertys
     public int MaxCapacity { get; }

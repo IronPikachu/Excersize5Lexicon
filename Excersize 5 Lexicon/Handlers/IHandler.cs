@@ -1,9 +1,12 @@
-﻿namespace Excersize_5_Lexicon.Handlers;
+﻿using Excersize_5_Lexicon.Garages;
+using Excersize_5_Lexicon.Vehicles;
 
-public interface IHandler
+namespace Excersize_5_Lexicon.Handlers;
+
+public interface IHandler<T> : IGarageMethodsIn<T> where T : IVehicle
 {
     //Propertys
-
+    string GarageName { get; }
 
     //Public Methods
 

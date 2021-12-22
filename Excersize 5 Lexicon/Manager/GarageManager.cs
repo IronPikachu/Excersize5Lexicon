@@ -1,43 +1,145 @@
-﻿using Excersize_5_Lexicon.Garages;
-using Excersize_5_Lexicon.Handlers;
+﻿using Excersize_5_Lexicon.Handlers;
 using Excersize_5_Lexicon.UIs;
 using Excersize_5_Lexicon.Vehicles;
+using System.Reflection;
 
 namespace Excersize_5_Lexicon.Manager;
 
-public class GarageManager : IGarageMethodsIn<Vehicle>
+public class GarageManager
 {
     //Fields
-    private IUI userInterface = new UI();
-    private IHandler handler = new Handler();
-    private List<IGarage<Vehicle>> garages;
+    private IUI ui;
+    private List<IHandler<IVehicle>> handlers = new();// List<IHandler<IVehicle>>();
+    private List<string> availableVehicles = new List<string> { "Airplane", "Boat", "Bus", "Car", "Motorcycle", "Unicycle" };
 
     //Propertys
 
 
     //Constructors
-
+    public GarageManager()
+    {
+        Console.Write("Please enter your name: ");
+        ui = new UI(Console.ReadLine()!);
+    }
 
     //Public Methods
-    public bool AddVehicle(Vehicle vehicle)
+    public void Main()
     {
-        throw new NotImplementedException();
+        bool run = true;
+        ui.Greetings();
+        Console.Write("Press any key to continue...");
+        Console.ReadKey();
+        while (run)
+        {
+            char[] options = { '0', '1', '2', '3', '4', '5' };
+            char option = ui.MainMenu(handlers.Count, options);
+            switch (option)
+            {
+                case '0':   //Exit the program
+                    run = false;
+                    ui.Farewell();
+                    break;
+                case '1':   //Add a garage
+                    AddGarage();
+                    break;
+                case '2':   //Add a vehicle
+                    AddVehicle();
+                    break;
+                case '3':   //Remove a vehicle
+                    RemoveVehicle();
+                    break;
+                case '4':   //Find a vehicle
+                    FindVehicle();
+                    break;
+                case '5':   //List all vehicles
+                    ListVehicles();
+                    break;
+                default:    //wtf?
+                    ui.PrintErrorMessage("Wrong option somehow happened..?");
+                    break;
+            }
+        }
     }
-
-    public bool RemoveVehicle(Vehicle vehicle)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool VehicleExists(Vehicle vehicle)
-    {
-        throw new NotImplementedException();
-    }
-
-
 
     //Private Methods
+    private void AddGarage()
+    {
+        char[] options = { '0', '1', '2', '3' };
+        char[] vOptions = new char[availableVehicles.Count];
+        for (int i = 0; i < availableVehicles.Count; i++)
+            vOptions[i] = $"{i}"[0];
+        char option = ui.AddGarageMenu(options);
+        switch (option)
+        {
+            case '0':   //Exit to main menu, do nothing
+                break;
+            case '1':   //Start a garage with a set capacity
+                char vOption = ui.TypeOfVehicleMenu(vOptions, availableVehicles);
+                if (vOption == '0')
+                    return;
+                string name = ui.GetGarageNameFromUser("Enter the name of the garage:");
+                int size = ui.GetCapacityFromUser("Enter the garages capacity:");
+                switch (vOption)
+                {
+                    case '1':   //Airplane
+                        var h = new Handler<Airplane>("test", 10);
+                        handlers.Add(h);
+                        handlers.Add((new Handler<Airplane>(garageName : name, garageSpace : size)) as Handler<IVehicle>);
+                        break;
+                    case '2':   //Boat
 
+                        break;
+                    case '3':   //Bus
+
+                        break;
+                    case '4':   //Car
+
+                        break;
+                    case '5':   //Motorcycle
+
+                        break;
+                    case '6':   //Unicycle
+
+                        break;
+                    case '7':   //Everything - Vehicle
+
+                        break;
+                    default:
+                        ui.PrintErrorMessage("Nani the fuck");
+                        break;
+                }
+                break;
+            case '2':   //Start a garage with a set capacity and vehicles
+                break;
+            case '3':   //Read garage from json
+                break;
+            default:
+                ui.PrintErrorMessage("Bruh wat..?");
+                break;
+        }
+    }
+    private void AddVehicle()
+    {
+
+    }
+    private void RemoveVehicle()
+    {
+
+    }
+    private void FindVehicle()
+    {
+
+    }
+    private void ListVehicles()
+    {
+        foreach (var handler in handlers)
+        {
+            foreach (var vehicle in handler.Garage)
+            {
+                ui.PrintMessage($"{vehicle} exists in the {handler.Garage.Name} garage");
+            }
+        }
+    }
 
     //Destructors
 }

@@ -3,43 +3,42 @@ using Excersize_5_Lexicon.Vehicles;
 
 namespace Excersize_5_Lexicon.Handlers;
 
-public class Handler : IHandler, IGarageMethodsIn<Vehicle>
+public class Handler<T> : IHandler<T> where T : IVehicle
 {
     //Fields
-
+    private Garage<T> garage;
 
     //Propertys
-
+    public string GarageName { get { return garage.Name; } }
 
     //Constructors
-
+    public Handler(string garageName, int garageSpace)
+    {
+        try
+        {
+            garage = new Garage<T>(garageName, garageSpace);
+        }
+        catch (ArgumentNullException e)
+        {
+            throw e;
+        }
+    }
 
     //Public Methods
-    public void AddVehicle(Vehicle vehicle)
+    public bool AddVehicle(T vehicle)
     {
-        throw new NotImplementedException();
+        return garage.AddVehicle(vehicle);
     }
 
-    public void RemoveVehicle(Vehicle vehicle)
+    public bool RemoveVehicle(T vehicle)
     {
-        throw new NotImplementedException();
+        return garage.RemoveVehicle(vehicle);
     }
 
-    public bool VehicleExists(Vehicle vehicle)
+    public bool VehicleExists(T vehicle)
     {
-        throw new NotImplementedException();
+        return garage.VehicleExists(vehicle);
     }
-
-    bool IGarageMethodsIn<Vehicle>.AddVehicle(Vehicle vehicle)
-    {
-        throw new NotImplementedException();
-    }
-
-    bool IGarageMethodsIn<Vehicle>.RemoveVehicle(Vehicle vehicle)
-    {
-        throw new NotImplementedException();
-    }
-
 
     //Private Methods
 

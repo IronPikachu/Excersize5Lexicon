@@ -1,6 +1,6 @@
 ﻿namespace Excersize_5_Lexicon.Vehicles;
 
-public abstract class Vehicle
+public abstract class Vehicle : IVehicle
 {
     //Fields
     private string registryNumber;
