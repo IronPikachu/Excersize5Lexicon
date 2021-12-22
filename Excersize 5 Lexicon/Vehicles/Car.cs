@@ -1,9 +1,11 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public class Car : Vehicle
 {
     //Fields
-    private string brand;
+    private string brand = "";
 
     //Propertys
     public string Brand
@@ -26,6 +28,13 @@ public class Car : Vehicle
     public override string ToString()
     {
         return base.ToString() + $" It was made by {Brand}";
+    }
+
+    public override bool Equals(IVehicle? other)
+    {
+        if (other == null)
+            return false;
+        return base.Equals(other) && Brand == ((Car)other).Brand;
     }
 
     //Private Methods

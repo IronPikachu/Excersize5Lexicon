@@ -1,4 +1,6 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public class Airplane : Vehicle
 {
@@ -29,6 +31,13 @@ public class Airplane : Vehicle
     public override string ToString()
     {
         return base.ToString() + $" It has an amazing wingspan of {WingSpan} meters!";
+    }
+
+    public override bool Equals(IVehicle? other)
+    {
+        if (other == null)
+            return false;
+        return base.Equals(other) && WingSpan == ((Airplane)other).WingSpan;
     }
 
     //Private Methods

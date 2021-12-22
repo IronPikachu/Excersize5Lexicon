@@ -1,4 +1,6 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public class Motorcycle : Vehicle
 {
@@ -27,6 +29,13 @@ public class Motorcycle : Vehicle
     public override string ToString()
     {
         return base.ToString() + $" It weights {Weight} kg!";
+    }
+
+    public override bool Equals(IVehicle? other)
+    {
+        if (other == null)
+            return false;
+        return base.Equals(other) && Weight == ((Motorcycle)other).Weight;
     }
 
     //Private Methods

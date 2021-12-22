@@ -1,5 +1,7 @@
 ﻿using Excersize_5_Lexicon.Vehicles;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Garages;
 
@@ -68,7 +70,7 @@ public class Garage<T> : IGarage<T> where T : IVehicle
     {
         for (int i = 0; i < ParkedVehicles; i++)
         {
-            if(vehicles[i] == vehicle)
+            if(vehicles[i]!.Equals(vehicle))
                 return true;
         }
         return false;
@@ -79,9 +81,9 @@ public class Garage<T> : IGarage<T> where T : IVehicle
         bool success = false;
         for (int i = 0; i < ParkedVehicles; i++)
         {
-            if (vehicles[i] == vehicle)
+            if (vehicles[i]!.Equals(vehicle))
             {
-                vehicles[i] = null;
+                vehicles[i] = default;
                 success = true;
                 break;
             }
@@ -96,7 +98,7 @@ public class Garage<T> : IGarage<T> where T : IVehicle
             if(vehicles[i] == null && vehicles[i + 1] != null)
             {
                 vehicles[i] = vehicles[i + 1];
-                vehicles[i + 1] = null;
+                vehicles[i + 1] = default;
             }
         }
 

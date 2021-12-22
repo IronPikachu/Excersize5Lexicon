@@ -1,4 +1,6 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public class Unicycle : Vehicle
 {
@@ -27,6 +29,13 @@ public class Unicycle : Vehicle
     public override string ToString()
     {
         return base.ToString() + $" You must weight less than {WeightLimit} kg unless you want to break it...";
+    }
+
+    public override bool Equals(IVehicle? other)
+    {
+        if (other == null)
+            return false;
+        return base.Equals(other) && WeightLimit == ((Unicycle)other).WeightLimit;
     }
 
     //Private Methods

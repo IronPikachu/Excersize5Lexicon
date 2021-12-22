@@ -1,9 +1,11 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public class Boat : Vehicle
 {
     //Fields
-    private string boatName;
+    private string boatName = "";
 
     //Propertys
     public string BoatName
@@ -26,6 +28,13 @@ public class Boat : Vehicle
     public override string ToString()
     {
         return base.ToString() + $" This boats name is {BoatName}.";
+    }
+
+    public override bool Equals(IVehicle? other)
+    {
+        if (other == null)
+            return false;
+        return base.Equals(other) && BoatName == ((Boat)other).BoatName;
     }
 
     //Private Methods

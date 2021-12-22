@@ -1,4 +1,6 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public class Bus : Vehicle
 {
@@ -30,6 +32,13 @@ public class Bus : Vehicle
     public override string ToString()
     {
         return base.ToString() + $" There are {Seats} seats.";
+    }
+
+    public override bool Equals(IVehicle? other)
+    {
+        if (other == null)
+            return false;
+        return base.Equals(other) && Seats == ((Bus)other).Seats;
     }
 
     //Private Methods

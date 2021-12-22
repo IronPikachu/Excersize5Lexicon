@@ -1,11 +1,13 @@
-﻿namespace Excersize_5_Lexicon.Vehicles;
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles;
 
 public abstract class Vehicle : IVehicle
 {
     //Fields
-    private string registryNumber;
-    private string ownerName;
-    private string color;
+    private string registryNumber = "";
+    private string ownerName = "";
+    private string color = "";
     private int amountOfWheels;
     private int price;
 
@@ -69,6 +71,45 @@ public abstract class Vehicle : IVehicle
     public override string ToString()
     {
         return $"Registry Number: {RegistryNumber}, owned by {OwnerName}, is a {Color} color and has {AmountOfWheels} wheels. It's price is {Price}.";
+    }
+
+    public virtual bool Equals(IVehicle? other)
+    {
+        if(other == null)
+            return false;
+        return RegistryNumber == other.RegistryNumber && OwnerName == other.OwnerName && Color == other.Color && AmountOfWheels == other.AmountOfWheels && Price == other.Price;
+    }
+
+    public static bool operator == (Vehicle lhs, IVehicle rhs)
+    {
+        if(lhs.GetType().FullName == rhs.GetType().FullName)
+            return lhs.Equals(rhs);
+        return false;
+    }
+
+    public static bool operator != (Vehicle lhs, IVehicle rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (ReferenceEquals(obj, null))
+        {
+            return false;
+        }
+
+        return Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
     }
 
     //Private Methods

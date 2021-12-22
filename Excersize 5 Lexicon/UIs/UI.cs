@@ -1,5 +1,8 @@
 ﻿using Excersize_5_Lexicon.Extras;
 using Excersize_5_Lexicon.Vehicles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Excersize_5_Lexicon.UIs;
 
@@ -122,7 +125,7 @@ public class UI : IUI
         }
     }
 
-    public Vehicle GetVehicleFromUser<T>() where T : Vehicle
+    public IVehicle GetVehicleFromUser<T>() where T : IVehicle
     {
         Console.Clear();
         PrintMessage($"Please enter the registry number of the {typeof(T)}.");
@@ -219,6 +222,24 @@ public class UI : IUI
     {
         Console.WriteLine(message);
     }
+    public int PromptInt(int min = int.MinValue)
+    {
+        string unformattedResult = Console.ReadLine()!;
+        int result;
+        while (true)
+        {
+            if (int.TryParse(unformattedResult, out result))
+            {
+                if (result < min)
+                    PrintErrorMessage($"Integer should be greater than {min}.");
+                else
+                    return result;
+            }
+            else
+                PrintErrorMessage("Enter an integer!");
+            unformattedResult = Console.ReadLine()!;
+        }
+    }
     //Private Methods
     private char PromptKey(char[] validChars)
     {
@@ -247,24 +268,6 @@ public class UI : IUI
         return result;
     }
     //I'm not proud, should probably refactor it...
-    private int PromptInt(int min = int.MinValue)
-    {
-        string unformattedResult = Console.ReadLine()!;
-        int result;
-        while (true)
-        {
-            if (int.TryParse(unformattedResult, out result))
-            {
-                if (result < min)
-                    PrintErrorMessage($"Integer should be greater than {min}.");
-                else
-                    return result;
-            }
-            else
-                PrintErrorMessage("Enter an integer!");
-            unformattedResult = Console.ReadLine()!;
-        }
-    }
     private double PromptDouble(double min = double.MinValue)
     {
         string unformattedResult = Console.ReadLine()!;

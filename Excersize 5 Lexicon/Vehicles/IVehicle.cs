@@ -1,6 +1,8 @@
-﻿namespace Excersize_5_Lexicon.Vehicles
+﻿using System;
+
+namespace Excersize_5_Lexicon.Vehicles
 {
-    public interface IVehicle
+    public interface IVehicle : IEquatable<IVehicle>
     {
         int AmountOfWheels { get; }
         string Color { get; }

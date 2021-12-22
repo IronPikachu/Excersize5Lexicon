@@ -1,6 +1,8 @@
 ﻿using Excersize_5_Lexicon.Handlers;
 using Excersize_5_Lexicon.UIs;
 using Excersize_5_Lexicon.Vehicles;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Excersize_5_Lexicon.Manager;
@@ -74,54 +76,74 @@ public class GarageManager
             case '0':   //Exit to main menu, do nothing
                 break;
             case '1':   //Start a garage with a set capacity
-                char vOption = ui.TypeOfVehicleMenu(vOptions, availableVehicles);
-                if (vOption == '0')
-                    return;
-                string name = ui.GetGarageNameFromUser("Enter the name of the garage:");
-                int size = ui.GetCapacityFromUser("Enter the garages capacity:");
-                switch (vOption)
-                {
-                    case '1':   //Airplane
-                        var h = new Handler<Airplane>("test", 10);
-                        handlers.Add(h);
-                        handlers.Add((new Handler<Airplane>(garageName : name, garageSpace : size)) as Handler<IVehicle>);
-                        break;
-                    case '2':   //Boat
-
-                        break;
-                    case '3':   //Bus
-
-                        break;
-                    case '4':   //Car
-
-                        break;
-                    case '5':   //Motorcycle
-
-                        break;
-                    case '6':   //Unicycle
-
-                        break;
-                    case '7':   //Everything - Vehicle
-
-                        break;
-                    default:
-                        ui.PrintErrorMessage("Nani the fuck");
-                        break;
-                }
+                AddGarageUserInput(vOptions);
                 break;
             case '2':   //Start a garage with a set capacity and vehicles
+                AddGarageUserInput(vOptions);
+                ui.PrintMessage("Please enter how many vehicles to add: ");
+                int maxVehicleAmount = handlers[handlers.Count - 1].MaxCapacity;
+                int add = ui.PromptInt(maxVehicleAmount);
+                for (int i = 0; i < add; i++)
+                {
+                    AddVehicle(handlers.Count - 1);
+                }
                 break;
             case '3':   //Read garage from json
-                break;
+                throw new NotImplementedException("This is not implemented yet, if ever!!!");
+                //break;
             default:
                 ui.PrintErrorMessage("Bruh wat..?");
                 break;
         }
     }
+    private void AddGarageUserInput(char[] vOptions)
+    {
+        char vOption = ui.TypeOfVehicleMenu(vOptions, availableVehicles);
+        if (vOption == '0') //Exit to main menu
+            return;
+        string name = ui.GetGarageNameFromUser("Enter the name of the garage:");
+        int size = ui.GetCapacityFromUser("Enter the garages capacity:");
+        switch (vOption)
+        {
+            case '1':   //Airplane
+                handlers.Add(new Handler<Airplane>(name, size));
+                break;
+            case '2':   //Boat
+                handlers.Add(new Handler<Boat>(name, size));
+                break;
+            case '3':   //Bus
+                handlers.Add(new Handler<Bus>(name, size));
+                break;
+            case '4':   //Car
+                handlers.Add(new Handler<Car>(name, size));
+                break;
+            case '5':   //Motorcycle
+                handlers.Add(new Handler<Motorcycle>(name, size));
+                break;
+            case '6':   //Unicycle
+                handlers.Add(new Handler<Unicycle>(name, size));
+                break;
+            case '7':   //Everything - Vehicle
+                handlers.Add(new Handler<Vehicle>(name, size));
+                break;
+            default:
+                ui.PrintErrorMessage("Nani the fuck");
+                break;
+        }
+    }
+
     private void AddVehicle()
     {
 
     }
+
+    private void AddVehicle(int handlerIndex)
+    {
+        Type type = handlers[handlerIndex].GetGenericType();
+        IVehicle newVehicle = ui.GetVehicleFromUser<typeof(type)>();
+        handlers[handlerIndex].AddVehicle(newVehicle);
+    }
+
     private void RemoveVehicle()
     {
 
@@ -134,9 +156,9 @@ public class GarageManager
     {
         foreach (var handler in handlers)
         {
-            foreach (var vehicle in handler.Garage)
+            foreach (var vehicle in handler.GarageName)
             {
-                ui.PrintMessage($"{vehicle} exists in the {handler.Garage.Name} garage");
+                ui.PrintMessage($"{vehicle} exists in the {handler.GarageName} garage");
             }
         }
     }
