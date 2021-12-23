@@ -2,7 +2,7 @@
 
 namespace Excersize_5_Lexicon.Garages;
 
-public interface IGarageMethodsIn<in T>
+public interface IGarageMethodsIn<in T> where T : IVehicle
 {
     //Public Methods
     public bool AddVehicle(T vehicle);

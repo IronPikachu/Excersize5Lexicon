@@ -25,7 +25,7 @@ public class UI : IUI
     //Public Methods
     public void Greetings()
     {
-        Console.Clear();
+        ClearWindow();
         string greeting = "";
         greeting += $"Hello {UserName} and welcome to the garage manager!";
         Console.WriteLine(greeting);
@@ -33,7 +33,7 @@ public class UI : IUI
 
     public void Farewell()
     {
-        Console.Clear();
+        ClearWindow();
         string farewell = "";
         farewell += $"Goodbye {UserName}, I hope to see you soon!\nHave a good one!\n";
 
@@ -42,7 +42,7 @@ public class UI : IUI
 
     public char MainMenu(int nrOfGarages, char[] validChars)
     {
-        Console.Clear();
+        ClearWindow();
         string menu = "";
         int option = 1;
         menu += "Press keys to choose an option:\n";
@@ -66,7 +66,7 @@ public class UI : IUI
 
     public char AddGarageMenu(char[] validChars)
     {
-        Console.Clear();
+        ClearWindow();
         int option = 1;
 
         string menu = "";
@@ -86,7 +86,7 @@ public class UI : IUI
 
     public char TypeOfVehicleMenu(char[] validChars, List<string> availableVehicles)
     {
-        Console.Clear();
+        ClearWindow();
         int option = 1;
 
         string menu = "";
@@ -107,12 +107,14 @@ public class UI : IUI
 
     public string GetGarageNameFromUser(string message)
     {
+        ClearWindow();
         PrintMessage(message);
         return PromptString();
     }
 
     public int GetCapacityFromUser(string message, int min = 0)
     {
+        ClearWindow();
         Console.WriteLine(message);
         int capacity;
         while (true)
@@ -125,74 +127,75 @@ public class UI : IUI
         }
     }
 
-    public IVehicle GetVehicleFromUser<T>() where T : IVehicle
+    public IVehicle GetVehicleFromUser(Type type)
     {
-        Console.Clear();
-        PrintMessage($"Please enter the registry number of the {typeof(T)}.");
+        ClearWindow();
+        string name = type.Name;
+        PrintMessage($"Please enter the registry number of the {name}.");
         string regNum = PromptString();
-        PrintMessage($"Please enter the name of the ownder of the {typeof(T)}.");
+        PrintMessage($"Please enter the name of the owner of the {name}.");
         string owner = PromptString();
-        PrintMessage($"What color is the {typeof(T)}?");
+        PrintMessage($"What color is the {name}?");
         string color = PromptString();
-        PrintMessage($"How many wheels does the {typeof(T)} have?");
+        PrintMessage($"How many wheels does the {name} have?");
         int wheels = PromptInt(1);
-        PrintMessage($"What is the price of the {typeof(T)}?");
+        PrintMessage($"What is the price of the {name}?");
         int price = PromptInt(0);
-        if (typeof(T) == typeof(Airplane))
+        if (type == typeof(Airplane))
         {
             PrintMessage($"What is the wingspan?");
             double wing = PromptDouble(0d);
             Airplane airplane = new Airplane(regNum, owner, color, wheels, price, wing);
             return airplane;
         }
-        else if (typeof(T) == typeof(Boat))
+        else if (type == typeof(Boat))
         {
-            PrintMessage($"What is your {typeof(T)}s name?");
+            PrintMessage($"What is your {name}s name?");
             string boatName = PromptString();
             Boat boat = new Boat(regNum, owner, color, wheels, price, boatName);
             return boat;
         }
-        else if (typeof(T) == typeof(Bus))
+        else if (type == typeof(Bus))
         {
-            PrintMessage($"How many seats does the {typeof(T)} have?");
+            PrintMessage($"How many seats does the {name} have?");
             int seats = PromptInt(0);
             Bus bus = new Bus(regNum, owner, color, wheels, price, seats);
             return bus;
         }
-        else if (typeof(T) == typeof(Car))
+        else if (type == typeof(Car))
         {
-            PrintMessage($"What brand is your {typeof(T)}?");
+            PrintMessage($"What brand is your {name}?");
             string brand = PromptString();
             Car car = new Car(regNum, owner, color, wheels, price, brand);
             return car;
         }
-        else if (typeof(T) == typeof(Motorcycle))
+        else if (type == typeof(Motorcycle))
         {
-            PrintMessage($"How heavy is your {typeof(T)}?");
+            PrintMessage($"How heavy is your {name}?");
             int weight = PromptInt(0);
             Motorcycle mc = new Motorcycle(regNum, owner, color, wheels, price, weight);
             return mc;
         }
-        else if (typeof(T) == typeof(Unicycle))
+        else if (type == typeof(Unicycle))
         {
             PrintMessage($"How much weight can it hold?");
             double weight = PromptDouble(0);
             Unicycle unicycle = new Unicycle(regNum, owner, color, wheels, price, weight);
             return unicycle;
         }
-        else if (typeof(T) == typeof(Vehicle))
+        else if (type == typeof(Vehicle))
         {
-            throw new ArgumentException($"Can't create a generic {typeof(T)}!");
+            throw new ArgumentException($"Can't create a generic {name}!");
         }
         else
         {
-            throw new ArgumentException($"Couldn't decide type of {typeof(T)}, and it went terribly wrong.");
+            throw new ArgumentException($"Couldn't decide type of {name}, and it went terribly wrong.");
         }
     }
 
     public char AddVehicleMenu(char[] validChars, List<string> availableVehicles)
     {
-        Console.Clear();
+        ClearWindow();
         int option = 1;
 
         string menu = "";
@@ -222,7 +225,14 @@ public class UI : IUI
     {
         Console.WriteLine(message);
     }
-    public int PromptInt(int min = int.MinValue)
+
+    public void AwaitUserInput(string message = "Press any key to continue...")
+    {
+        Console.WriteLine(message);
+        Console.ReadKey();
+    }
+
+    public int PromptInt(int min = int.MinValue, int max = int.MaxValue)
     {
         string unformattedResult = Console.ReadLine()!;
         int result;
@@ -232,6 +242,8 @@ public class UI : IUI
             {
                 if (result < min)
                     PrintErrorMessage($"Integer should be greater than {min}.");
+                else if (result > max)
+                    PrintErrorMessage($"Integer should be less than {max}.");
                 else
                     return result;
             }
@@ -239,6 +251,11 @@ public class UI : IUI
                 PrintErrorMessage("Enter an integer!");
             unformattedResult = Console.ReadLine()!;
         }
+    }
+
+    public void ClearWindow()
+    {
+        Console.Clear();
     }
     //Private Methods
     private char PromptKey(char[] validChars)
@@ -282,7 +299,7 @@ public class UI : IUI
                     return result;
             }
             else
-                PrintErrorMessage("Enter an integer!");
+                PrintErrorMessage("Enter a decimal number!");
             unformattedResult = Console.ReadLine()!;
         }
     }

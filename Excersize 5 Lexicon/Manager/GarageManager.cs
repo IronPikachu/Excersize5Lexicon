@@ -3,7 +3,6 @@ using Excersize_5_Lexicon.UIs;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Excersize_5_Lexicon.Manager;
 
@@ -11,7 +10,7 @@ public class GarageManager
 {
     //Fields
     private IUI ui;
-    private List<IHandler<IVehicle>> handlers = new();// List<IHandler<IVehicle>>();
+    private List<IHandler<IVehicle>> handlers = new();
     private List<string> availableVehicles = new List<string> { "Airplane", "Boat", "Bus", "Car", "Motorcycle", "Unicycle" };
 
     //Propertys
@@ -29,7 +28,7 @@ public class GarageManager
     {
         bool run = true;
         ui.Greetings();
-        Console.Write("Press any key to continue...");
+        ui.AwaitUserInput();
         Console.ReadKey();
         while (run)
         {
@@ -82,7 +81,7 @@ public class GarageManager
                 AddGarageUserInput(vOptions);
                 ui.PrintMessage("Please enter how many vehicles to add: ");
                 int maxVehicleAmount = handlers[handlers.Count - 1].MaxCapacity;
-                int add = ui.PromptInt(maxVehicleAmount);
+                int add = ui.PromptInt(max: maxVehicleAmount);
                 for (int i = 0; i < add; i++)
                 {
                     AddVehicle(handlers.Count - 1);
@@ -134,20 +133,45 @@ public class GarageManager
 
     private void AddVehicle()
     {
+        ui.PrintMessage($"In which garage do you want to add a vehicle?");
+
+
 
     }
 
     private void AddVehicle(int handlerIndex)
     {
         Type type = handlers[handlerIndex].GetGenericType();
-        IVehicle newVehicle = ui.GetVehicleFromUser<typeof(type)>();
-        handlers[handlerIndex].AddVehicle(newVehicle);
+        IVehicle newVehicle = ui.GetVehicleFromUser(type);
+        if (!handlers[handlerIndex].AddVehicle(newVehicle))
+        {
+            ui.PrintErrorMessage($"{handlers[handlerIndex].GarageName} is full and couldn't recieve more {type}s.");
+        }
+        else
+        {
+            ui.PrintMessage($"Successfully added {type} to {handlers[handlerIndex].GarageName}.");
+        }
     }
 
     private void RemoveVehicle()
     {
 
     }
+
+    private void RemoveVehicle(int handlerIndex)
+    {
+        Type type = handlers[handlerIndex].GetGenericType();
+        IVehicle vehicleToRemove = ui.GetVehicleFromUser(type);
+        if (!handlers[handlerIndex].RemoveVehicle(vehicleToRemove))
+        {
+            ui.PrintErrorMessage($"The {type} you want to remove does not exist in {handlers[handlerIndex].GarageName}.");
+        }
+        else
+        {
+            ui.PrintMessage($"Succesfully removed the {type} from {handlers[handlerIndex].GarageName}.");
+        }
+    }
+
     private void FindVehicle()
     {
 
@@ -161,6 +185,7 @@ public class GarageManager
                 ui.PrintMessage($"{vehicle} exists in the {handler.GarageName} garage");
             }
         }
+        ui.AwaitUserInput();
     }
 
     //Destructors

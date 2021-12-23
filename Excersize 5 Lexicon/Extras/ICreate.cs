@@ -1,8 +1,8 @@
 ﻿namespace Excersize_5_Lexicon.Extras;
 
-internal interface ISave
+internal interface ICreate
 {
-    public void Save();
+    public void Create();
 }
 
 /*

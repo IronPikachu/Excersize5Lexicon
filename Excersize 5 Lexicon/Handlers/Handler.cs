@@ -7,7 +7,7 @@ namespace Excersize_5_Lexicon.Handlers;
 public class Handler<T> : IHandler<T> where T : IVehicle
 {
     //Fields
-    private Garage<T> garage;
+    private IGarage<T> garage;
 
     //Propertys
     public string GarageName { get { return garage.Name; } }
@@ -27,19 +27,19 @@ public class Handler<T> : IHandler<T> where T : IVehicle
     }
 
     //Public Methods
-    public bool AddVehicle(T vehicle)
+    public bool AddVehicle(IVehicle vehicle)
     {
-        return garage.AddVehicle(vehicle);
+        return garage.AddVehicle((T)vehicle);
     }
 
-    public bool RemoveVehicle(T vehicle)
+    public bool RemoveVehicle(IVehicle vehicle)
     {
-        return garage.RemoveVehicle(vehicle);
+        return garage.RemoveVehicle((T)vehicle);
     }
 
-    public bool VehicleExists(T vehicle)
+    public bool VehicleExists(IVehicle vehicle)
     {
-        return garage.VehicleExists(vehicle);
+        return garage.VehicleExists((T)vehicle);
     }
 
     public Type GetGenericType()
