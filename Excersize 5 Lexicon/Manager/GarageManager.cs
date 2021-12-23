@@ -3,6 +3,7 @@ using Excersize_5_Lexicon.UIs;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Excersize_5_Lexicon.Manager;
 
@@ -68,7 +69,7 @@ public class GarageManager
         char[] options = { '0', '1', '2', '3' };
         char[] vOptions = new char[availableVehicles.Count];
         for (int i = 0; i < availableVehicles.Count; i++)
-            vOptions[i] = $"{i}"[0];
+            vOptions[i] = $"{i+1}"[0];
         char option = ui.AddGarageMenu(options);
         switch (option)
         {
@@ -95,6 +96,7 @@ public class GarageManager
                 break;
         }
     }
+
     private void AddGarageUserInput(char[] vOptions)
     {
         char vOption = ui.TypeOfVehicleMenu(vOptions, availableVehicles);
@@ -133,10 +135,11 @@ public class GarageManager
 
     private void AddVehicle()
     {
-        ui.PrintMessage($"In which garage do you want to add a vehicle?");
-
-
-
+        List<string> names = handlers.Select(p => p.GarageName).ToList();
+        int index = ui.AddVehicleMenu(names);
+        if (index == 0)
+            return;
+        AddVehicle(index - 1);
     }
 
     private void AddVehicle(int handlerIndex)
@@ -145,17 +148,22 @@ public class GarageManager
         IVehicle newVehicle = ui.GetVehicleFromUser(type);
         if (!handlers[handlerIndex].AddVehicle(newVehicle))
         {
-            ui.PrintErrorMessage($"{handlers[handlerIndex].GarageName} is full and couldn't recieve more {type}s.");
+            ui.PrintErrorMessage($"{handlers[handlerIndex].GarageName} is full and couldn't recieve more {type.Name}s.");
         }
         else
         {
-            ui.PrintMessage($"Successfully added {type} to {handlers[handlerIndex].GarageName}.");
+            ui.PrintMessage($"Successfully added {type.Name} to {handlers[handlerIndex].GarageName}.");
         }
+        ui.AwaitUserInput();
     }
 
     private void RemoveVehicle()
     {
-
+        List<string> names = handlers.Select(p => p.GarageName).ToList();
+        int index = ui.RemoveVehicleMenu(names);
+        if (index == 0)
+            return;
+        RemoveVehicle(index - 1);
     }
 
     private void RemoveVehicle(int handlerIndex)
@@ -164,25 +172,60 @@ public class GarageManager
         IVehicle vehicleToRemove = ui.GetVehicleFromUser(type);
         if (!handlers[handlerIndex].RemoveVehicle(vehicleToRemove))
         {
-            ui.PrintErrorMessage($"The {type} you want to remove does not exist in {handlers[handlerIndex].GarageName}.");
+            ui.PrintErrorMessage($"The {type.Name} you want to remove does not exist in {handlers[handlerIndex].GarageName}.");
         }
         else
         {
-            ui.PrintMessage($"Succesfully removed the {type} from {handlers[handlerIndex].GarageName}.");
+            ui.PrintMessage($"Succesfully removed the {type.Name} from {handlers[handlerIndex].GarageName}.");
         }
+        ui.AwaitUserInput();
     }
 
     private void FindVehicle()
     {
+        List<Func<IHandler<IVehicle>, bool>> list = new();
+        List<IHandler<IVehicle>> found = new(handlers);
+        /*
+        p => p.Thing == anotherThing
+        Func<T, bool>(T p) {return p.Thing == anotherThing;}
+         */
 
+
+
+
+        foreach(var f in list)
+        {
+            found = found.Where(f).ToList();
+        }
+
+        ui.ClearWindow();
+
+        if(found.Count > 0)
+            ui.PrintMessage("Here's what i found:\n");
+        else
+        {
+            ui.PrintMessage("Nothing found mathing those parameters...");
+            ui.AwaitUserInput();
+            return;
+        }
+        foreach(var handler in found)
+        {
+            foreach(IVehicle? vehicle in handler)
+            {
+                ui.PrintMessage($"{vehicle}\n\twas found in {handler.GarageName}.");
+            }
+        }
+        ui.AwaitUserInput();
     }
-    private void ListVehicles()
+
+    private void ListVehicles() //TODO: Fix this shit it's not good
     {
+        ui.ClearWindow();
         foreach (var handler in handlers)
         {
-            foreach (var vehicle in handler.GarageName)
+            foreach (var vehicle in handler)
             {
-                ui.PrintMessage($"{vehicle} exists in the {handler.GarageName} garage");
+                ui.PrintMessage($"{vehicle} \n\texists in the {handler.GarageName} garage.\n\n");
             }
         }
         ui.AwaitUserInput();

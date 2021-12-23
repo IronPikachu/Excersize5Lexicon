@@ -1,6 +1,8 @@
 ﻿using Excersize_5_Lexicon.Garages;
 using Excersize_5_Lexicon.Vehicles;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Handlers;
 
@@ -45,6 +47,16 @@ public class Handler<T> : IHandler<T> where T : IVehicle
     public Type GetGenericType()
     {
         return typeof(T);
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return garage.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 
     //Private Methods

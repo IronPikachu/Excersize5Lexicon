@@ -1,4 +1,5 @@
 ﻿using Excersize_5_Lexicon.Extras;
+using Excersize_5_Lexicon.Handlers;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,10 @@ public class UI : IUI
 
         //Terminate
         menu += "0. Exit.\n\n";
-        menu += $"There are currently {nrOfGarages} garages active.\n\n";
+        string singular = "garage";
+        if (nrOfGarages != 1)
+            singular += "s";
+        menu += $"There are currently {nrOfGarages} {singular} active.\n\n";
 
         Console.WriteLine(menu);
         return PromptKey(validChars);
@@ -138,9 +142,14 @@ public class UI : IUI
         PrintMessage($"What color is the {name}?");
         string color = PromptString();
         PrintMessage($"How many wheels does the {name} have?");
-        int wheels = PromptInt(1);
+        int wheels = PromptInt(0);
         PrintMessage($"What is the price of the {name}?");
         int price = PromptInt(0);
+        /*        switch (type.Name)
+                {
+                    case nameof(Airplane):
+                        break;
+                }*/
         if (type == typeof(Airplane))
         {
             PrintMessage($"What is the wingspan?");
@@ -193,25 +202,80 @@ public class UI : IUI
         }
     }
 
-    public char AddVehicleMenu(char[] validChars, List<string> availableVehicles)
+    public int AddVehicleMenu(List<string> availableGarages)
     {
         ClearWindow();
-        int option = 1;
+        Console.WriteLine($"In which garage do you want to add a vehicle?\n");
 
         string menu = "";
-        for (int i = 0; i < availableVehicles.Count; i++)
-        {
-            menu += $"{option++}: {availableVehicles[i]}.\n";
-        }
 
-        //Cancel
-        menu += "0. Cancel and return to main menu.\n\n";
+        for (int i = 0; i < availableGarages.Count; i++)
+            menu += $"{i + 1}\t-\t{availableGarages[i]}.\n";
+        menu += $"\n{0}\t-\tExit.";
 
         Console.WriteLine(menu);
-        return PromptKey(validChars);
+        int min = 0, max = availableGarages.Count + 1;
+
+        int who = PromptInt(min: min, max: max);
+
+        return who;
     }
 
+    public int RemoveVehicleMenu(List<string> availableGarages)
+    {
+        ClearWindow();
+        Console.WriteLine($"In which garage do you want to add a vehicle?\n");
 
+        string menu = "";
+
+        for (int i = 0; i < availableGarages.Count; i++)
+            menu += $"{i + 1}\t-\t{availableGarages[i]}.\n";
+        menu += $"\n{0}\t-\tExit.";
+
+        Console.WriteLine(menu);
+        int min = 0, max = availableGarages.Count + 1;
+
+        int who = PromptInt(min: min, max: max);
+
+        return who;
+    }
+
+    public Func<IHandler<IVehicle>, bool> FindVehicleFromUser()
+    {
+        PrintMessage($"Which attribute would you like to search for?\n");
+        // Strings should be ==, for numbers, ask ==, <, >, <= or >=
+        // Begin with regular vehicle
+        string menu = "";
+        int options = 1;
+
+        menu += $"{options++}. Registry Number.\n";
+        menu += $"{options++}. Owner Name.\n";
+        menu += $"{options++}. Color.\n";
+        menu += $"{options++}. Wheel Amount.\n";
+        menu += $"{options++}. Price.\n";
+
+        menu += $"\n{0}. Exit.\n";
+
+        PrintMessage(menu);
+        char[] valid = new char[options + 1];
+        for (int i = 0; i <= options; i++)
+            valid[i] = $"{i}"[0];
+        char prompt = PromptKey(valid);
+        switch (prompt)
+        {
+            case '0':
+                return p => true;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            default:
+                throw new ArgumentException("Terrible things are happening...");
+
+        }
+
+    }
 
     public void PrintErrorMessage(string message)
     {
