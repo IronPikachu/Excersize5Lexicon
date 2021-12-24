@@ -46,10 +46,42 @@ public class Handler<T> : IHandler<T> where T : IVehicle
 
     public string GetRegistryNumber()
     {
+        foreach(var vehicle in garage)
+        {
+            yield return vehicle.RegistryNumber;
+        }
+    }
 
+    public string GetOwner()
+    {
+        foreach (var vehicle in garage)
+        {
+            yield return vehicle.OwnerName;
+        }
+    }
 
+    public string GetColor()
+    {
+        foreach (var vehicle in garage)
+        {
+            yield return vehicle.Color;
+        }
+    }
 
-        return null;
+    public int GetWheelAmount()
+    {
+        foreach (var vehicle in garage)
+        {
+            yield return vehicle.AmountOfWheels;
+        }
+    }
+
+    public int GetPrice()
+    {
+        foreach (var vehicle in garage)
+        {
+            yield return vehicle.Price;
+        }
     }
 
     public Type GetGenericType()

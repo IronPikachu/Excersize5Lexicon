@@ -14,7 +14,10 @@ public interface IHandler<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> wh
     //Public Methods
     Type GetGenericType();
     string GetRegistryNumber();
-
+    string GetOwner();
+    string GetColor();
+    int GetWheelAmount();
+    int GetPrice();
 
     //Private Methods
 

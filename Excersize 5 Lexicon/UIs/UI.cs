@@ -261,6 +261,11 @@ public class UI : IUI
         for (int i = 0; i <= options; i++)
             valid[i] = $"{i}"[0];
         char option = PromptKey(valid);
+        char option2;
+        string stringVal;
+        int intVal;
+        string menuInt;
+        string[] operators;
         switch (option)
         {
             case '0':
@@ -268,26 +273,103 @@ public class UI : IUI
             case '1':   //Registry number, string, contains string or complete string?
                 ClearWindow();
                 PrintMessage($"Which method?\n1. Full string.\n2. Contains.");
-                char option2 = PromptKey(new char[] { '1', '2' });
-                string val = PromptString();
+                option2 = PromptKey(new char[] { '1', '2' });
+                stringVal = PromptString();
                 if (option2 == '1')
-                    return p => p.GetRegistryNumber() == val;
+                    return p => p.GetRegistryNumber() == stringVal;
                 else if (option2 == '2')
-                    return p => p.GetRegistryNumber().Contains(val);
+                    return p => p.GetRegistryNumber().Contains(stringVal);
                 throw new ArgumentException($"Options whack, develop better");
             case '2':   //Owner name, string
-
+                ClearWindow();
+                PrintMessage($"Which method?\n1. Full string.\n2. Contains.");
+                option2 = PromptKey(new char[] { '1', '2' });
+                stringVal = PromptString();
+                if (option2 == '1')
+                    return p => p.GetOwner() == stringVal;
+                else if (option2 == '2')
+                    return p => p.GetOwner().Contains(stringVal);
+                throw new ArgumentException($"Options whack, develop better");
             case '3':   //Color, string
-
+                ClearWindow();
+                PrintMessage($"Please enter the color: ");
+                stringVal = PromptString();
+                return p => p.GetColor() == stringVal;
             case '4':   //Wheel amount, int
+                ClearWindow();
+                options = 1;
+                operators = new string[] { "==", "<", ">", "<=", ">=", "!=" };
+                menuInt = $"Choose operator:\n";
+                menuInt += $"{options++}. '{operators[0]}'\n";
+                menuInt += $"{options++}. '{operators[1]}'\n";
+                menuInt += $"{options++}. '{operators[2]}'\n";
+                menuInt += $"{options++}. '{operators[3]}'\n";
+                menuInt += $"{options++}. '{operators[4]}'\n";
+                menuInt += $"{options++}. '{operators[5]}'\n\n";
+                PrintMessage(menuInt);
 
+                option2 = PromptKey(new char[] { '1', '2', '3', '4', '5', '6' });
+
+                ClearWindow();
+                PrintMessage("Enter the value: ");
+                intVal = PromptInt(min: 0);
+
+                switch (option2)
+                {
+                    case '1':
+                        return p => p.GetWheelAmount() == intVal;
+                    case '2':
+                        return p => p.GetWheelAmount() < intVal;
+                    case '3':
+                        return p => p.GetWheelAmount() > intVal;
+                    case '4':
+                        return p => p.GetWheelAmount() <= intVal;
+                    case '5':
+                        return p => p.GetWheelAmount() >= intVal;
+                    case '6':
+                        return p => p.GetWheelAmount() != intVal;
+                    default:
+                        throw new ArgumentException("Terrible terrible things...");
+                }
             case '5':   //Price, int
+                ClearWindow();
+                options = 1;
+                operators = new string[] { "==", "<", ">", "<=", ">=", "!=" };
+                menuInt = $"Choose operator:\n";
+                menuInt += $"{options++}. '{operators[0]}'\n";
+                menuInt += $"{options++}. '{operators[1]}'\n";
+                menuInt += $"{options++}. '{operators[2]}'\n";
+                menuInt += $"{options++}. '{operators[3]}'\n";
+                menuInt += $"{options++}. '{operators[4]}'\n";
+                menuInt += $"{options++}. '{operators[5]}'\n\n";
+                PrintMessage(menuInt);
 
+                option2 = PromptKey(new char[] { '1', '2', '3', '4', '5', '6' });
+
+                ClearWindow();
+                PrintMessage("Enter the value: ");
+                intVal = PromptInt(min: 0);
+
+                switch (option2)
+                {
+                    case '1':
+                        return p => p.GetPrice() == intVal;
+                    case '2':
+                        return p => p.GetPrice() < intVal;
+                    case '3':
+                        return p => p.GetPrice() > intVal;
+                    case '4':
+                        return p => p.GetPrice() <= intVal;
+                    case '5':
+                        return p => p.GetPrice() >= intVal;
+                    case '6':
+                        return p => p.GetPrice() != intVal;
+                    default:
+                        throw new ArgumentException("Terrible terrible things...");
+                }
             default:
                 throw new ArgumentException("Terrible things are happening...");
-
         }
-
     }
 
     public void PrintErrorMessage(string message)
