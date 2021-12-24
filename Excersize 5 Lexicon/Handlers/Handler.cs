@@ -44,6 +44,14 @@ public class Handler<T> : IHandler<T> where T : IVehicle
         return garage.VehicleExists((T)vehicle);
     }
 
+    public string GetRegistryNumber()
+    {
+
+
+
+        return null;
+    }
+
     public Type GetGenericType()
     {
         return typeof(T);

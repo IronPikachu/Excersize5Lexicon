@@ -260,16 +260,29 @@ public class UI : IUI
         char[] valid = new char[options + 1];
         for (int i = 0; i <= options; i++)
             valid[i] = $"{i}"[0];
-        char prompt = PromptKey(valid);
-        switch (prompt)
+        char option = PromptKey(valid);
+        switch (option)
         {
             case '0':
                 return p => true;
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
+            case '1':   //Registry number, string, contains string or complete string?
+                ClearWindow();
+                PrintMessage($"Which method?\n1. Full string.\n2. Contains.");
+                char option2 = PromptKey(new char[] { '1', '2' });
+                string val = PromptString();
+                if (option2 == '1')
+                    return p => p.GetRegistryNumber() == val;
+                else if (option2 == '2')
+                    return p => p.GetRegistryNumber().Contains(val);
+                throw new ArgumentException($"Options whack, develop better");
+            case '2':   //Owner name, string
+
+            case '3':   //Color, string
+
+            case '4':   //Wheel amount, int
+
+            case '5':   //Price, int
+
             default:
                 throw new ArgumentException("Terrible things are happening...");
 
