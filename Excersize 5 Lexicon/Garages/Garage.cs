@@ -62,6 +62,7 @@ public class Garage<T> : IGarage<T> where T : IVehicle
     {
         if (!(parkedVehicles < maxCapacity))
             return false;
+
         vehicles[ParkedVehicles++] = vehicle;
         return true;
     }

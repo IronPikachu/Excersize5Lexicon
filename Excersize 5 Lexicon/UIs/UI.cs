@@ -243,7 +243,7 @@ public class UI : IUI
     public Func<IHandler<IVehicle>, bool> FindVehicleFromUser()
     {
         PrintMessage($"Which attribute would you like to search for?\n");
-        // Strings should be ==, for numbers, ask ==, <, >, <= or >=
+        // Strings should be == or contains: Numbers should be ==, <, >, <= or >=
         // Begin with regular vehicle
         string menu = "";
         int options = 1;
@@ -266,22 +266,21 @@ public class UI : IUI
         int intVal;
         string menuInt;
         string[] operators;
+                ClearWindow();
         switch (option)
         {
             case '0':
                 return p => true;
             case '1':   //Registry number, string, contains string or complete string?
-                ClearWindow();
                 PrintMessage($"Which method?\n1. Full string.\n2. Contains.");
                 option2 = PromptKey(new char[] { '1', '2' });
                 stringVal = PromptString();
                 if (option2 == '1')
-                    return p => p.GetRegistryNumber() == stringVal;
+                    return p => p.GetRegistryNumber() == stringVal.ToUpper();
                 else if (option2 == '2')
-                    return p => p.GetRegistryNumber().Contains(stringVal);
+                    return p => p.GetRegistryNumber().Contains(stringVal.ToUpper());
                 throw new ArgumentException($"Options whack, develop better");
             case '2':   //Owner name, string
-                ClearWindow();
                 PrintMessage($"Which method?\n1. Full string.\n2. Contains.");
                 option2 = PromptKey(new char[] { '1', '2' });
                 stringVal = PromptString();
@@ -291,12 +290,10 @@ public class UI : IUI
                     return p => p.GetOwner().Contains(stringVal);
                 throw new ArgumentException($"Options whack, develop better");
             case '3':   //Color, string
-                ClearWindow();
                 PrintMessage($"Please enter the color: ");
                 stringVal = PromptString();
                 return p => p.GetColor() == stringVal;
             case '4':   //Wheel amount, int
-                ClearWindow();
                 options = 1;
                 operators = new string[] { "==", "<", ">", "<=", ">=", "!=" };
                 menuInt = $"Choose operator:\n";
@@ -332,7 +329,6 @@ public class UI : IUI
                         throw new ArgumentException("Terrible terrible things...");
                 }
             case '5':   //Price, int
-                ClearWindow();
                 options = 1;
                 operators = new string[] { "==", "<", ">", "<=", ">=", "!=" };
                 menuInt = $"Choose operator:\n";
@@ -412,6 +408,18 @@ public class UI : IUI
         }
     }
 
+    public string PromptString()
+    {
+        string result = Console.ReadLine()!;
+        while (string.IsNullOrEmpty(result))
+        {
+            PrintErrorMessage("Enter a string!");
+            result = Console.ReadLine()!;
+        }
+
+        return result;
+    }
+
     public void ClearWindow()
     {
         Console.Clear();
@@ -431,17 +439,6 @@ public class UI : IUI
         }
 
         return keyPressed;
-    }
-    private string PromptString()
-    {
-        string result = Console.ReadLine()!;
-        while (string.IsNullOrEmpty(result))
-        {
-            PrintErrorMessage("Enter a string!");
-            result = Console.ReadLine()!;
-        }
-
-        return result;
     }
     //I'm not proud, should probably refactor it...
     private double PromptDouble(double min = double.MinValue)

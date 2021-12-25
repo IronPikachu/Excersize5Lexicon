@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Vehicles;
 
@@ -10,6 +11,7 @@ public abstract class Vehicle : IVehicle
     private string color = "";
     private int amountOfWheels;
     private int price;
+    private static List<string> takenRegistryNumbers = new List<string>();
 
     //Propertys
     public string RegistryNumber
@@ -17,7 +19,10 @@ public abstract class Vehicle : IVehicle
         get { return registryNumber; }
         private set
         {
-            registryNumber = value ?? throw new ArgumentNullException($"RegistryNumber cannot be null!");
+            if (takenRegistryNumbers.Contains(value.ToUpper()))
+                throw new ArgumentException($"{value} already exists as a vehicle!");
+            registryNumber = value.ToUpper() ?? throw new ArgumentNullException($"RegistryNumber cannot be null!");
+            takenRegistryNumbers.Add(value.ToUpper());
         }
     }
     public string OwnerName
@@ -116,6 +121,8 @@ public abstract class Vehicle : IVehicle
 
 
     //Destructors
-
-
+    ~Vehicle()
+    {
+        takenRegistryNumbers.Remove(RegistryNumber);
+    }
 }

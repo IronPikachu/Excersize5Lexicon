@@ -1,4 +1,5 @@
-﻿using Excersize_5_Lexicon.Vehicles;
+﻿using Excersize_5_Lexicon.Handlers;
+using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +15,7 @@ public interface IUI
     IVehicle GetVehicleFromUser(Type type);
     int AddVehicleMenu(List<string> availableGarages);
     int RemoveVehicleMenu(List<string> availableGarages);
+    Func<IHandler<IVehicle>, bool> FindVehicleFromUser();
     void Farewell();
     void Greetings();
     char MainMenu(int nrOfGarages, char[] validChars);
@@ -21,5 +23,6 @@ public interface IUI
     void PrintMessage(string message);
     void AwaitUserInput(string message = "Press any key to continue...");
     int PromptInt(int min = int.MinValue, int max = int.MaxValue);
+    string PromptString();
     void ClearWindow();
 }

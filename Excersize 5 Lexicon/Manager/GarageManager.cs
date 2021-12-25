@@ -69,7 +69,7 @@ public class GarageManager
         char[] options = { '0', '1', '2', '3' };
         char[] vOptions = new char[availableVehicles.Count];
         for (int i = 0; i < availableVehicles.Count; i++)
-            vOptions[i] = $"{i+1}"[0];
+            vOptions[i] = $"{i + 1}"[0];
         char option = ui.AddGarageMenu(options);
         switch (option)
         {
@@ -90,7 +90,7 @@ public class GarageManager
                 break;
             case '3':   //Read garage from json
                 throw new NotImplementedException("This is not implemented yet, if ever!!!");
-                //break;
+            //break;
             default:
                 ui.PrintErrorMessage("Bruh wat..?");
                 break;
@@ -145,14 +145,22 @@ public class GarageManager
     private void AddVehicle(int handlerIndex)
     {
         Type type = handlers[handlerIndex].GetGenericType();
-        IVehicle newVehicle = ui.GetVehicleFromUser(type);
-        if (!handlers[handlerIndex].AddVehicle(newVehicle))
+        IVehicle newVehicle;
+        try
         {
-            ui.PrintErrorMessage($"{handlers[handlerIndex].GarageName} is full and couldn't recieve more {type.Name}s.");
+            newVehicle = ui.GetVehicleFromUser(type);
+            if (!handlers[handlerIndex].AddVehicle(newVehicle))
+            {
+                ui.PrintErrorMessage($"{handlers[handlerIndex].GarageName} is full and couldn't recieve more {type.Name}s.");
+            }
+            else
+            {
+                ui.PrintMessage($"Successfully added {type.Name} to {handlers[handlerIndex].GarageName}.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ui.PrintMessage($"Successfully added {type.Name} to {handlers[handlerIndex].GarageName}.");
+            ui.PrintErrorMessage(ex.Message);
         }
         ui.AwaitUserInput();
     }
@@ -189,18 +197,29 @@ public class GarageManager
         p => p.Thing == anotherThing
         Func<T, bool>(T p) {return p.Thing == anotherThing;}
          */
+        string input;
+        bool loop = true;
+        do
+        {
+            ui.ClearWindow();
+            ui.PrintMessage($"Type 'Exit' to exit, or anything to add another attribute...");
+            input = ui.PromptString();
+            if (input == "Exit")
+                loop = false;
+            else
+                list.Add(ui.FindVehicleFromUser());
+
+        } while (loop);
 
 
-
-
-        foreach(var f in list)
+        foreach (var f in list)
         {
             found = found.Where(f).ToList();
         }
 
         ui.ClearWindow();
 
-        if(found.Count > 0)
+        if (found.Count > 0)
             ui.PrintMessage("Here's what i found:\n");
         else
         {
@@ -208,9 +227,9 @@ public class GarageManager
             ui.AwaitUserInput();
             return;
         }
-        foreach(var handler in found)
+        foreach (var handler in found)
         {
-            foreach(IVehicle? vehicle in handler)
+            foreach (IVehicle? vehicle in handler)
             {
                 ui.PrintMessage($"{vehicle}\n\twas found in {handler.GarageName}.");
             }
