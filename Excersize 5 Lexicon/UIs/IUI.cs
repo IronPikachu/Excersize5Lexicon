@@ -1,4 +1,5 @@
 ﻿using Excersize_5_Lexicon.Garages;
+using Excersize_5_Lexicon.Handlers;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ public interface IUI
     IVehicle GetVehicleFromUser(Type type);
     int AddVehicleMenu(List<string> availableGarages);
     int RemoveVehicleMenu(List<string> availableGarages);
-    Func<IGarage<IVehicle>, bool> FindVehicleFromUser();
+    Func<IVehicle, bool> FindPredicateFromUser();
     void Farewell();
     void Greetings();
     char MainMenu(int nrOfGarages, char[] validChars);

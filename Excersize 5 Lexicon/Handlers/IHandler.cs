@@ -13,6 +13,7 @@ public interface IHandler<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> wh
 
     //Public Methods
     Type GetGenericType();
+    IEnumerable<T> SearchVehicles(Func<IVehicle, bool> predicate);
 
     //Private Methods
 

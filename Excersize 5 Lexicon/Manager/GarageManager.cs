@@ -11,7 +11,7 @@ public class GarageManager
 {
     //Fields
     private IUI ui;
-    private List<IGarage<IVehicle>> handlers = new();
+    private List<IHandler<IVehicle>> handlers = new();
     private List<string> availableVehicles = new List<string> { "Airplane", "Boat", "Bus", "Car", "Motorcycle", "Unicycle" };
 
     //Propertys
@@ -191,8 +191,8 @@ public class GarageManager
 
     private void FindVehicle()
     {
-        List<Func<IGarage<IVehicle>, bool>> list = new();
-        List<IGarage<IVehicle>> found = new(handlers); //TODO: Copy list but let them have the same references, but the 'found' list should be changed while 'handlers' should be unchanged
+        List<Func<IVehicle, bool>> list = new();
+        Dictionary<string, IEnumerable<IVehicle>> found = new(); //TODO: Copy list but let them have the same references, but the 'found' list should be changed while 'handlers' should be unchanged
         /*
         p => p.Thing == anotherThing
         Func<T, bool>(T p) {return p.Thing == anotherThing;}
@@ -207,14 +207,23 @@ public class GarageManager
             if (input == "Exit")
                 loop = false;
             else
-                list.Add(ui.FindVehicleFromUser());
+                list.Add(ui.FindPredicateFromUser());
 
         } while (loop);
 
-
-        foreach (var f in list)
+        for (int i = 0; i < handlers.Count; i++)
         {
-            found = found.Where(f).ToList();
+            found.Add(handlers[i].GarageName, handlers[i].SearchVehicles(x =>
+            {
+                bool result = true;
+                foreach (var f in list)
+                {
+                    result &= f(x);
+                    if (!result)
+                        return false;
+                }
+                return true;
+            }));
         }
 
         ui.ClearWindow();
@@ -227,11 +236,14 @@ public class GarageManager
             ui.AwaitUserInput();
             return;
         }
-        foreach (var handler in found)
+        foreach (var sak in found)
         {
-            foreach (IVehicle? vehicle in handler)
+            if(sak.Value.Count() > 0)
             {
-                ui.PrintMessage($"{vehicle}\n\twas found in {handler.GarageName}.\n");
+                foreach(var vehicle in sak.Value)
+                {
+                    ui.PrintMessage($"{vehicle}\nExists in the {sak.Key} garage.");
+                }
             }
         }
         ui.AwaitUserInput();

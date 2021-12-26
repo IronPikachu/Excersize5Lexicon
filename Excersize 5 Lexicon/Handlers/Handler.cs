@@ -3,13 +3,14 @@ using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Excersize_5_Lexicon.Handlers;
 
 public class Handler<T> : IHandler<T> where T : IVehicle
 {
     //Fields
-    private Garages.IGarage<T> garage;
+    private IGarage<T> garage;
 
     //Propertys
     public string GarageName { get { return garage.Name; } }
@@ -42,6 +43,11 @@ public class Handler<T> : IHandler<T> where T : IVehicle
     public bool VehicleExists(IVehicle vehicle)
     {
         return garage.VehicleExists((T)vehicle);
+    }
+
+    public IEnumerable<T> SearchVehicles(Func<IVehicle, bool> predicate)
+    {
+        return this.Where(p => predicate(p));
     }
 
     public IEnumerator<T> GetEnumerator()

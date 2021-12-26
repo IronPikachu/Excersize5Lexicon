@@ -1,5 +1,6 @@
 ﻿using Excersize_5_Lexicon.Extras;
 using Excersize_5_Lexicon.Garages;
+using Excersize_5_Lexicon.Handlers;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -240,7 +241,7 @@ public class UI : IUI
         return who;
     }
 
-    public Func<IGarage<IVehicle>, bool> FindVehicleFromUser()
+    public Func<IVehicle, bool> FindPredicateFromUser()
     {
         PrintMessage($"Which attribute would you like to search for?\n");
         // Strings should be == or contains: Numbers should be ==, <, >, <= or >=
@@ -276,23 +277,23 @@ public class UI : IUI
                 option2 = PromptKey(new char[] { '1', '2' });
                 stringVal = PromptString();
                 if (option2 == '1')
-                    return p => p.GetRegistryNumber() == stringVal.ToUpper();
+                    return p => p.RegistryNumber == stringVal.ToUpper();
                 else if (option2 == '2')
-                    return p => p.GetRegistryNumber().Contains(stringVal.ToUpper());
+                    return p => p.RegistryNumber.Contains(stringVal.ToUpper());
                 throw new ArgumentException($"Options whack, develop better");
             case '2':   //Owner name, string
                 PrintMessage($"Which method?\n1. Full string.\n2. Contains.");
                 option2 = PromptKey(new char[] { '1', '2' });
                 stringVal = PromptString();
                 if (option2 == '1')
-                    return p => p.GetOwner() == stringVal;
+                    return p => p.OwnerName == stringVal;
                 else if (option2 == '2')
-                    return p => p.GetOwner().Contains(stringVal);
+                    return p => p.OwnerName.Contains(stringVal);
                 throw new ArgumentException($"Options whack, develop better");
             case '3':   //Color, string
                 PrintMessage($"Please enter the color: ");
                 stringVal = PromptString();
-                return p => p.GetColor() == stringVal;
+                return p => p.Color == stringVal;
             case '4':   //Wheel amount, int
                 options = 1;
                 operators = new string[] { "==", "<", ">", "<=", ">=", "!=" };
@@ -314,17 +315,17 @@ public class UI : IUI
                 switch (option2)
                 {
                     case '1':
-                        return p => p.GetWheelAmount() == intVal;
+                        return p => p.AmountOfWheels == intVal;
                     case '2':
-                        return p => p.GetWheelAmount() < intVal;
+                        return p => p.AmountOfWheels < intVal;
                     case '3':
-                        return p => p.GetWheelAmount() > intVal;
+                        return p => p.AmountOfWheels > intVal;
                     case '4':
-                        return p => p.GetWheelAmount() <= intVal;
+                        return p => p.AmountOfWheels <= intVal;
                     case '5':
-                        return p => p.GetWheelAmount() >= intVal;
+                        return p => p.AmountOfWheels >= intVal;
                     case '6':
-                        return p => p.GetWheelAmount() != intVal;
+                        return p => p.AmountOfWheels != intVal;
                     default:
                         throw new ArgumentException("Terrible terrible things...");
                 }
@@ -349,17 +350,17 @@ public class UI : IUI
                 switch (option2)
                 {
                     case '1':
-                        return p => p.GetPrice() == intVal;
+                        return p => p.Price == intVal;
                     case '2':
-                        return p => p.GetPrice() < intVal;
+                        return p => p.Price < intVal;
                     case '3':
-                        return p => p.GetPrice() > intVal;
+                        return p => p.Price > intVal;
                     case '4':
-                        return p => p.GetPrice() <= intVal;
+                        return p => p.Price <= intVal;
                     case '5':
-                        return p => p.GetPrice() >= intVal;
+                        return p => p.Price >= intVal;
                     case '6':
-                        return p => p.GetPrice() != intVal;
+                        return p => p.Price != intVal;
                     default:
                         throw new ArgumentException("Terrible terrible things...");
                 }
