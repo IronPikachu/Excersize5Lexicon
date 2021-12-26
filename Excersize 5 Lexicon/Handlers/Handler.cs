@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Handlers;
 
-public class Handler<T> : IGarage<T> where T : IVehicle
+public class Handler<T> : IHandler<T> where T : IVehicle
 {
     //Fields
     private Garages.IGarage<T> garage;
@@ -44,51 +44,6 @@ public class Handler<T> : IGarage<T> where T : IVehicle
         return garage.VehicleExists((T)vehicle);
     }
 
-    public string GetRegistryNumber()
-    {
-        foreach(var vehicle in garage)
-        {
-            yield return vehicle.RegistryNumber;
-        }
-    }
-
-    public string GetOwner()
-    {
-        foreach (var vehicle in garage)
-        {
-            yield return vehicle.OwnerName;
-        }
-    }
-
-    public string GetColor()
-    {
-        foreach (var vehicle in garage)
-        {
-            yield return vehicle.Color;
-        }
-    }
-
-    public int GetWheelAmount()
-    {
-        foreach (var vehicle in garage)
-        {
-            yield return vehicle.AmountOfWheels;
-        }
-    }
-
-    public int GetPrice()
-    {
-        foreach (var vehicle in garage)
-        {
-            yield return vehicle.Price;
-        }
-    }
-
-    public Type GetGenericType()
-    {
-        return typeof(T);
-    }
-
     public IEnumerator<T> GetEnumerator()
     {
         return garage.GetEnumerator();
@@ -97,6 +52,11 @@ public class Handler<T> : IGarage<T> where T : IVehicle
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public Type GetGenericType()
+    {
+        return typeof(T);
     }
 
     //Private Methods

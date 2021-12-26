@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Handlers;
 
-public interface IGarage<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> where T : IVehicle
+public interface IHandler<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> where T : IVehicle
 {
     //Propertys
     string GarageName { get; }
@@ -13,11 +13,6 @@ public interface IGarage<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> whe
 
     //Public Methods
     Type GetGenericType();
-    string GetRegistryNumber();
-    string GetOwner();
-    string GetColor();
-    int GetWheelAmount();
-    int GetPrice();
 
     //Private Methods
 
