@@ -240,7 +240,7 @@ public class UI : IUI
         return who;
     }
 
-    public Func<IHandler<IVehicle>, bool> FindVehicleFromUser()
+    public Func<IGarage<IVehicle>, bool> FindVehicleFromUser()
     {
         PrintMessage($"Which attribute would you like to search for?\n");
         // Strings should be == or contains: Numbers should be ==, <, >, <= or >=

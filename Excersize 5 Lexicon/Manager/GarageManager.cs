@@ -11,7 +11,7 @@ public class GarageManager
 {
     //Fields
     private IUI ui;
-    private List<IHandler<IVehicle>> handlers = new();
+    private List<IGarage<IVehicle>> handlers = new();
     private List<string> availableVehicles = new List<string> { "Airplane", "Boat", "Bus", "Car", "Motorcycle", "Unicycle" };
 
     //Propertys
@@ -191,8 +191,8 @@ public class GarageManager
 
     private void FindVehicle()
     {
-        List<Func<IHandler<IVehicle>, bool>> list = new();
-        List<IHandler<IVehicle>> found = new(handlers);
+        List<Func<IGarage<IVehicle>, bool>> list = new();
+        List<IGarage<IVehicle>> found = new(handlers); //TODO: Copy list but let them have the same references, but the 'found' list should be changed while 'handlers' should be unchanged
         /*
         p => p.Thing == anotherThing
         Func<T, bool>(T p) {return p.Thing == anotherThing;}
@@ -231,7 +231,7 @@ public class GarageManager
         {
             foreach (IVehicle? vehicle in handler)
             {
-                ui.PrintMessage($"{vehicle}\n\twas found in {handler.GarageName}.");
+                ui.PrintMessage($"{vehicle}\n\twas found in {handler.GarageName}.\n");
             }
         }
         ui.AwaitUserInput();

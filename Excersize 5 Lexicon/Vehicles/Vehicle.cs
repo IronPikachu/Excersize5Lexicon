@@ -11,7 +11,7 @@ public abstract class Vehicle : IVehicle
     private string color = "";
     private int amountOfWheels;
     private int price;
-    private static List<string> takenRegistryNumbers = new List<string>();
+    private static List<string> takenRegistryNumbers = new List<string>(); //NOT A GOOD SOLUTION KIND OF, PREVENTS COPYING
 
     //Propertys
     public string RegistryNumber

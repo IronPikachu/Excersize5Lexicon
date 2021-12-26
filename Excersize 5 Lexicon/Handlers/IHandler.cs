@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Handlers;
 
-public interface IHandler<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> where T : IVehicle
+public interface IGarage<out T> : IGarageMethodsIn<IVehicle>, IEnumerable<T> where T : IVehicle
 {
     //Propertys
     string GarageName { get; }

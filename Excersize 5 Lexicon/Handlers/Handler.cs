@@ -6,10 +6,10 @@ using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Handlers;
 
-public class Handler<T> : IHandler<T> where T : IVehicle
+public class Handler<T> : IGarage<T> where T : IVehicle
 {
     //Fields
-    private IGarage<T> garage;
+    private Garages.IGarage<T> garage;
 
     //Propertys
     public string GarageName { get { return garage.Name; } }

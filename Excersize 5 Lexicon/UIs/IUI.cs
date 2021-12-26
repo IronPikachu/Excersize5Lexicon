@@ -15,7 +15,7 @@ public interface IUI
     IVehicle GetVehicleFromUser(Type type);
     int AddVehicleMenu(List<string> availableGarages);
     int RemoveVehicleMenu(List<string> availableGarages);
-    Func<IHandler<IVehicle>, bool> FindVehicleFromUser();
+    Func<IGarage<IVehicle>, bool> FindVehicleFromUser();
     void Farewell();
     void Greetings();
     char MainMenu(int nrOfGarages, char[] validChars);
