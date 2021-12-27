@@ -20,6 +20,7 @@ public interface IUI
     void Farewell();
     void Greetings();
     char MainMenu(int nrOfGarages, char[] validChars);
+
     void PrintErrorMessage(string message);
     void PrintMessage(string message);
     void AwaitUserInput(string message = "Press any key to continue...");

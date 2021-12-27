@@ -3,6 +3,7 @@ using Excersize_5_Lexicon.UIs;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Excersize_5_Lexicon.Manager;
@@ -89,12 +90,66 @@ public class GarageManager
                 }
                 break;
             case '3':   //Read garage from json
-                throw new NotImplementedException("This is not implemented yet, if ever!!!");
-            //break;
+                int fileOptions = 1;
+                ui.ClearWindow();
+                foreach (var fileName in Directory.GetFiles(@"SavedObjects\"))
+                {
+                    ui.PrintMessage($"{fileOptions++}. {fileName}");
+                }
+                ui.PrintMessage($"{0} to exit");
+                int choise = ui.PromptInt(0, fileOptions - 1);
+                if (choise == 0)
+                    return;
+                string fileToGet = Directory.GetFiles(@"SavedObjects\")[choise - 1];
+                string typeOfObject = "";
+                for (int i = 0; i < fileToGet.Length; i++)
+                {
+                    if (fileToGet[i] == '.')
+                        break;
+                    typeOfObject += fileToGet[i];
+                    if (fileToGet[i] == '_')
+                        typeOfObject = "";
+                }
+                try
+                {
+                    switch (typeOfObject)
+                    {
+                        case "Airplane":
+                            handlers.Add(new Handler<Airplane>(fileToGet));
+                            break;
+                        case "Boat":
+                            handlers.Add(new Handler<Boat>(fileToGet));
+                            break;
+                        case "Bus":
+                            handlers.Add(new Handler<Bus>(fileToGet));
+                            break;
+                        case "Car":
+                            handlers.Add(new Handler<Car>(fileToGet));
+                            break;
+                        case "Motorcycle":
+                            handlers.Add(new Handler<Motorcycle>(fileToGet));
+                            break;
+                        case "Unicycle":
+                            handlers.Add(new Handler<Unicycle>(fileToGet));
+                            break;
+                        case "Vehicle":
+                            handlers.Add(new Handler<Vehicle>(fileToGet));
+                            break;
+                        default:
+                            ui.PrintErrorMessage($"Apparently {typeOfObject} was something that couldn't be found...");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ui.PrintErrorMessage($"{ex.GetType().Name} was thrown with message: {ex.Message}");
+                }
+                break;
             default:
                 ui.PrintErrorMessage("Bruh wat..?");
                 break;
         }
+        ui.AwaitUserInput();
     }
 
     private void AddGarageUserInput(char[] vOptions)
@@ -238,9 +293,9 @@ public class GarageManager
         }
         foreach (var sak in found)
         {
-            if(sak.Value.Count() > 0)
+            if (sak.Value.Count() > 0)
             {
-                foreach(var vehicle in sak.Value)
+                foreach (var vehicle in sak.Value)
                 {
                     ui.PrintMessage($"{vehicle}\nExists in the {sak.Key} garage.");
                 }

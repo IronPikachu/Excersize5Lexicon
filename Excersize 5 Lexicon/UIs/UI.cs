@@ -1,6 +1,4 @@
 ﻿using Excersize_5_Lexicon.Extras;
-using Excersize_5_Lexicon.Garages;
-using Excersize_5_Lexicon.Handlers;
 using Excersize_5_Lexicon.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -368,6 +366,8 @@ public class UI : IUI
                 throw new ArgumentException("Terrible things are happening...");
         }
     }
+
+
 
     public void PrintErrorMessage(string message)
     {
