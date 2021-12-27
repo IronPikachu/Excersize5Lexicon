@@ -5,5 +5,5 @@ namespace Excersize_5_Lexicon.Extras;
 
 internal interface IRead<T> where T : IVehicle
 {
-    IGarage<IVehicle> Read(string fileName);
+    IGarage<T> Read(string fileName);
 }

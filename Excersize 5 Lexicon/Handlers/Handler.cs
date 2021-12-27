@@ -1,6 +1,7 @@
 ﻿using Excersize_5_Lexicon.Extras;
 using Excersize_5_Lexicon.Garages;
 using Excersize_5_Lexicon.Vehicles;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -83,7 +84,8 @@ public class Handler<T> : IHandler<T>, ICRUD where T : IVehicle
     public void Create()
     {
         string fileName = $"{path}{GarageName}_{GetGenericType().Name}.json";
-        string jsonString = JsonSerializer.Serialize(garage);
+
+        string jsonString = JsonConvert.SerializeObject((Garage<T>)garage);
 
         //Save jsonString to fileName
 
@@ -96,7 +98,7 @@ public class Handler<T> : IHandler<T>, ICRUD where T : IVehicle
         {
             string readText = File.ReadAllText(fileName);
 
-            IGarage<T> readGarage = JsonSerializer.Deserialize<Garage<T>>(readText) ?? throw new ArgumentNullException($"Something was null");
+            IGarage<T> readGarage = System.Text.Json.JsonSerializer.Deserialize<Garage<T>>(readText) ?? throw new ArgumentNullException($"Something was null");
             return (IGarage<IVehicle>)readGarage;
         }
         throw new FileNotFoundException($"Could not find {fileName}");
@@ -113,7 +115,7 @@ public class Handler<T> : IHandler<T>, ICRUD where T : IVehicle
             Create();
             return;
         }
-        string jsonString = JsonSerializer.Serialize(garage);
+        string jsonString = JsonConvert.SerializeObject((Garage<T>)garage);
         File.WriteAllText(fileName, jsonString);
     }
 

@@ -1,21 +1,28 @@
 ﻿using Excersize_5_Lexicon.Vehicles;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Excersize_5_Lexicon.Garages;
 
+[JsonObject]
 public class Garage<T> : IGarage<T> where T : IVehicle
 {
     //Fields
+    [JsonProperty]
     private string name = "";
+    [JsonProperty]
     private int maxCapacity;
     private int parkedVehicles;
     private int freeParkingSpots;
+    [JsonProperty]
     private T?[] vehicles;
 
     //Propertys
+    [JsonIgnore]
     public int MaxCapacity { get { return maxCapacity; } private set { maxCapacity = value; } }
+    [JsonIgnore]
     public int ParkedVehicles
     {
         get { return parkedVehicles; }
@@ -25,7 +32,9 @@ public class Garage<T> : IGarage<T> where T : IVehicle
             FreeParkingSpots = MaxCapacity - parkedVehicles;
         }
     }
+    [JsonIgnore]
     public int FreeParkingSpots { get { return freeParkingSpots; } private set { freeParkingSpots = value; } }
+    [JsonIgnore]
     public string Name
     {
         get { return name; }
@@ -44,6 +53,7 @@ public class Garage<T> : IGarage<T> where T : IVehicle
         vehicles = new T[maxCapacity];
     }
 
+    [JsonConstructor]
     public Garage(string name, int maxCapacity, params T[] vehicles)
     {
         Name = name;
