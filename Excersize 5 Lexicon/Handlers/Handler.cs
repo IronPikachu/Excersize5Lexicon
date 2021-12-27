@@ -11,7 +11,7 @@ using System.Text.Json;
 
 namespace Excersize_5_Lexicon.Handlers;
 
-public class Handler<T> : IHandler<T>, ICRUD where T : IVehicle
+public class Handler<T> : IHandler<T>, ICRUD<T> where T : IVehicle
 {
     //Fields
     private IGarage<T> garage;
@@ -24,7 +24,7 @@ public class Handler<T> : IHandler<T>, ICRUD where T : IVehicle
     //Constructors
     public Handler(string fileName)
     {
-        garage = (IGarage<T>?)Read(fileName) ?? throw new NullReferenceException($"{fileName} returned a null value");
+        garage = Read(fileName) ?? throw new NullReferenceException($"{fileName} returned a null value");
     }
     public Handler(string garageName, int garageSpace)
     {
@@ -92,14 +92,14 @@ public class Handler<T> : IHandler<T>, ICRUD where T : IVehicle
         File.WriteAllText(fileName, jsonString);
     }
 
-    public IGarage<IVehicle> Read(string fileName)
+    public IGarage<T> Read(string fileName)
     {
         if (File.Exists(fileName))
         {
             string readText = File.ReadAllText(fileName);
 
-            IGarage<T> readGarage = System.Text.Json.JsonSerializer.Deserialize<Garage<T>>(readText) ?? throw new ArgumentNullException($"Something was null");
-            return (IGarage<IVehicle>)readGarage;
+            IGarage<T> readGarage = JsonConvert.DeserializeObject<Garage<T>>(readText) ?? throw new ArgumentNullException($"Something was null");
+            return readGarage; //Cannot cast atm!
         }
         throw new FileNotFoundException($"Could not find {fileName}");
     }

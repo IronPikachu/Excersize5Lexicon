@@ -2,7 +2,7 @@
 
 namespace Excersize_5_Lexicon.Extras;
 
-interface ICRUD : ICreate, IDelete, IRead<IVehicle>, IUpdate
+interface ICRUD<T> : ICreate, IDelete, IRead<T>, IUpdate where T : IVehicle
 {
 }
 

@@ -62,6 +62,8 @@ public class Garage<T> : IGarage<T> where T : IVehicle
         this.vehicles = new T[maxCapacity];
         for (int i = 0; i < vehicles.Length; i++)
         {
+            if (vehicles[i] == null)
+                break;
             this.vehicles[ParkedVehicles++] = vehicles[i];
         }
     }
